@@ -63,3 +63,88 @@ const galleryItems = [
       description: 'Lighthouse Coast Sea',
     },
   ];
+
+//const { preview, original, description } = galleryItems;
+const refs = {
+  listGallery: document.querySelector('.js-gallery'),
+  modal: document.querySelector('.js-lightbox'),
+  closeBtn: document.querySelector('.lightbox__button'),
+  lightBoxImg: document.querySelector('.lightbox__image'),
+  overlayBox: document.querySelector('.lightbox__overlay'),
+};
+
+const { listGallery, modal, closeBtn, lightBoxImg, overlayBox } = refs;
+
+// ================== добавление разметки в ul  
+function getItems(array) {
+    return array.map((elem) => { 
+    const { preview, original, description } = elem;
+    return `
+      <li class="gallery__item">
+      <a
+        class="gallery__link"
+        href=${original}
+      >
+        <img
+          class="gallery__image"
+          src=${preview}
+          data-source=${original}
+          alt=${description}
+        />
+      </a>
+    </li>`;
+    }).join('');
+};
+
+const markup = getItems(galleryItems);
+  
+listGallery.insertAdjacentHTML("afterbegin", markup);
+// ================== добавление разметки в ul  
+
+// ================== добавление/снятие класса на модалку
+function showElement(element){
+  element.classList.add('is-open');
+};
+  
+function hideElement(element){
+  element.classList.remove('is-open');
+};
+// ================== добавление/снятие класса на модалку
+
+// ================== открытие модалки
+listGallery.addEventListener('click', (e) => {
+  e.preventDefault();
+  if(e.target.nodeName == 'IMG'){
+    showElement(modal);
+    lightBoxImg.attributes.src.value = e.target.dataset.source;
+  };
+});
+// ================== открытие модалки
+
+// ================== закрытие модалки
+closeBtn.addEventListener('click', closeModalByClick);
+function closeModalByClick() {
+  hideElement(modal);
+};
+
+overlayBox.addEventListener('click', closeModalByBox);
+function closeModalByBox() {
+  hideElement(modal);
+};
+
+window.addEventListener('keydown', closeModalByEsc); 
+function closeModalByEsc(e){
+
+  if(e.code === 'Escape'){
+    hideElement(modal);
+  };
+}; 
+// ================== закрытие модалки
+
+// ================== зачистка слушателя
+if(modal.classList.contains('is-open')){
+  modal.removeEventListener('click', closeModalByBox);
+  window.removeEventListener('keydown', closeModalByEsc);
+  modal.removeEventListener('click', closeModalByClick);
+};
+// ================== зачистка слушателя
