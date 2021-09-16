@@ -108,6 +108,7 @@ function showElement(element){
   
 function hideElement(element){
   element.classList.remove('is-open');
+  lightBoxImg.src = '';
 };
 // ================== добавление/снятие класса на модалку
 
@@ -130,6 +131,7 @@ function closeModalByClick() {
 overlayBox.addEventListener('click', closeModalByBox);
 function closeModalByBox() {
   hideElement(modal);
+
 };
 
 window.addEventListener('keydown', closeModalByEsc); 
